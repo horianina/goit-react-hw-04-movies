@@ -17,3 +17,7 @@ img {
 .NavLink--active {
   color: palevioletred;
 }
+.MoviesContainer {
+  display: flex;
+  flex-direction: column;
+}

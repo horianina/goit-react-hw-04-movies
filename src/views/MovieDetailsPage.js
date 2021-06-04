@@ -16,27 +16,46 @@ class MovieDetailsPage extends Component {
 
   async componentDidMount() {
     const { movieId } = this.props.match.params;
-    const response = await Axios.get(
+    const response = Axios.get(
       ` https://api.themoviedb.org/3/movie/${movieId}?api_key=3645aff77d29c72aa909368ea3411743&language=en-US`
     );
 
     // console.log(response.data);
-    this.setState({ ...response.data });
-    const responseCast = await Axios.get(
+    // this.setState({ ...response.data });
+    const responseCast = Axios.get(
       `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=3645aff77d29c72aa909368ea3411743&language=en-US`
     );
 
-    this.setState({ ...responseCast.data });
+    // this.setState({ ...responseCast.data });
 
-    const responseReviews = await Axios.get(
+    const responseReviews = Axios.get(
       `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=3645aff77d29c72aa909368ea3411743&language=en-US&page=1`
     );
     // console.log(responseReviews.data);
-    this.setState({ results: responseReviews.data.results });
+    // this.setState({ results: responseReviews.data.results });
+
+    const [film, cast, reviews] = await Promise.all([
+      response,
+      responseCast,
+      responseReviews,
+    ]);
+    this.setState({
+      results: reviews.data.results,
+      ...film.data,
+      ...cast.data,
+    });
   }
   render() {
     return (
       <>
+        <button
+          type="button"
+          onClick={() => {
+            this.props.history.push("/");
+          }}
+        >
+          Go back
+        </button>
         <img
           src={`https://image.tmdb.org/t/p/w400/${this.state.poster_path}`}
           alt=""
