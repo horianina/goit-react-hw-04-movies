@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Axios from "axios";
-import { NavLink, Route, Switch } from "react-router-dom";
+import { NavLink, Route } from "react-router-dom";
 import NotFoundView from "./NotFoundView";
 
 class MovieDetailsPage extends Component {
@@ -76,10 +76,11 @@ class MovieDetailsPage extends Component {
             </ul>
           )}
         />
-        <Switch>
-          <Route
-            path={`/movies/:movieId/reviews`}
-            render={() => (
+
+        <Route
+          path={`/movies/:movieId/reviews`}
+          render={() =>
+            this.state.results.length ? (
               <ul>
                 {this.state.results.map((result) => (
                   <li key={result.id}>
@@ -88,10 +89,12 @@ class MovieDetailsPage extends Component {
                   </li>
                 ))}
               </ul>
-            )}
-          />
-          <Route component={NotFoundView} />
-        </Switch>
+            ) : (
+              <NotFoundView />
+            )
+          }
+        />
+        {/* <Route component={NotFoundView} /> */}
       </>
     );
   }
